@@ -9,7 +9,7 @@ namespace Ocelog.Formatting.Logstash
         public static ProcessedLogEvent Process(LogEvent logEvent)
         {
             var allFields = logEvent.AdditionalFields
-                .Concat(new object[] { logEvent.Content });
+                .Concat(new[] { logEvent.Content });
 
             var requiredFields = new Dictionary<string, object>()
             {

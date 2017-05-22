@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Ocelog.Formatting.Logstash
 {
@@ -8,7 +8,7 @@ namespace Ocelog.Formatting.Logstash
     {
         public static ProcessedLogEvent Process(LogEvent logEvent)
         {
-            var requiredFields = new Dictionary<string, object>()
+            var requiredFields = new Dictionary<string, object>
             {
                 { "@version", 1 },
                 { "@timestamp", logEvent.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) }
@@ -16,9 +16,9 @@ namespace Ocelog.Formatting.Logstash
 
             var allFields = new object[] { requiredFields }
                 .Concat(logEvent.AdditionalFields)
-                .Concat(new object[] { logEvent.Content });
+                .Concat(new[] { logEvent.Content });
 
-            return new ProcessedLogEvent() { Content = ObjectMerging.Flatten(allFields) };
+            return new ProcessedLogEvent { Content = ObjectMerging.Flatten(allFields) };
         }
     }
 }

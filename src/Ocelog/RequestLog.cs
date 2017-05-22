@@ -24,7 +24,7 @@ namespace Ocelog
             var logEvent = new LogEvent
             {
                 Level = LogLevel.Info,
-                CallerInfo = new CallerInfo() {FilePath = callerFilePath, LineNum = callerLineNumber},
+                CallerInfo = new CallerInfo {FilePath = callerFilePath, LineNum = callerLineNumber},
                 Content = ObjectMerging.Flatten(_fields)
             };
 

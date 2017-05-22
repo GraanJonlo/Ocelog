@@ -8,17 +8,17 @@ namespace Ocelog
     {
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToSnakeCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToSnakeCase(logEvent.Content) };
+            return logEvent => new ProcessedLogEvent { Content = ToSnakeCase(logEvent.Content) };
         }
 
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToPascalCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToPascalCase(logEvent.Content) };
+            return logEvent => new ProcessedLogEvent { Content = ToPascalCase(logEvent.Content) };
         }
 
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToCamelCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToCamelCase(logEvent.Content) };
+            return logEvent => new ProcessedLogEvent { Content = ToCamelCase(logEvent.Content) };
         }
 
         private static Dictionary<string, object> ToSnakeCase(Dictionary<string, object> content)
@@ -70,7 +70,7 @@ namespace Ocelog
 
         private static string ToPascalCase(string key)
         {
-            return string.Concat(Tokenize(key).Select(word => CapitalizeFirstChar(word)));
+            return string.Concat(Tokenize(key).Select(CapitalizeFirstChar));
         }
 
         private static Dictionary<string, object> ToCamelCase(Dictionary<string, object> content)
@@ -102,7 +102,7 @@ namespace Ocelog
 
         private static string CapitalizeFirstChar(string word)
         {
-            return char.ToUpper(word.First()) + word.Substring(1);
+            return word.Substring(0,1).ToUpper() + word.Substring(1);
         }
 
         private static string[] Tokenize(string key)
@@ -114,12 +114,11 @@ namespace Ocelog
         {
             if (j == 0)
                 return x.ToString().ToLower();
-            else if (char.IsUpper(x))
+            if (char.IsUpper(x))
                 return " " + x.ToString().ToLower();
-            else if (char.IsWhiteSpace(x) || x == '_')
+            if (char.IsWhiteSpace(x) || x == '_')
                 return " ";
-            else
-                return x.ToString();
+            return x.ToString();
         }
     }
 }

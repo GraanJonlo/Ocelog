@@ -7,9 +7,9 @@ namespace Ocelog
         public static ProcessedLogEvent Process(LogEvent logEvent)
         {
             var allFields = logEvent.AdditionalFields
-                .Concat(new object[] { logEvent.Content });
+                .Concat(new[] { logEvent.Content });
 
-            return new ProcessedLogEvent() { Content = ObjectMerging.Flatten(allFields) };
+            return new ProcessedLogEvent { Content = ObjectMerging.Flatten(allFields) };
         }
     }
 }

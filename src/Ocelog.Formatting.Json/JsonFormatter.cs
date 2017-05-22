@@ -10,12 +10,12 @@ namespace Ocelog.Formatting.Json
         {
             var document = processedLogEvent.Content;
 
-            var jsonSerializer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore };
-            jsonSerializer.Converters.Add(new StringEnumConverter() { AllowIntegerValues = false });
+            var jsonSerializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
+            jsonSerializer.Converters.Add(new StringEnumConverter { AllowIntegerValues = false });
 
             var json = JObject.FromObject(document, jsonSerializer);
 
-            return new FormattedLogEvent() { Content = JsonConvert.SerializeObject(json) };
+            return new FormattedLogEvent { Content = JsonConvert.SerializeObject(json) };
         }
     }
 }

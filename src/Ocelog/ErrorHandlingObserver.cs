@@ -30,7 +30,7 @@ namespace Ocelog
             }
             catch (Exception e)
             {
-                _logExceptionEvents.OnNext(new LogEvent() { Level = LogLevel.Error, Content = e, CallerInfo = value.CallerInfo });
+                _logExceptionEvents.OnNext(new LogEvent { Level = LogLevel.Error, Content = e, CallerInfo = value.CallerInfo });
             }
         }
     }

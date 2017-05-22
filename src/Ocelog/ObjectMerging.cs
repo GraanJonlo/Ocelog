@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Ocelog
 {
@@ -12,7 +13,7 @@ namespace Ocelog
             if (!allFields.Any())
                 return new Dictionary<string, object>();
 
-            return (Dictionary<string, object>)allFields
+            return allFields
                 .Select(ToDictionary)
                 .Aggregate((first, second) => Merge(second, first));
         }
@@ -52,7 +53,7 @@ namespace Ocelog
         public static Dictionary<string, object> ToDictionary(object fields, object[] stack)
         {
             if (stack.Contains(fields))
-                return new Dictionary<string, object>() { { "OcelogWarning", "Found a Circular Reference" } };
+                return new Dictionary<string, object> { { "OcelogWarning", "Found a Circular Reference" } };
 
             var type = fields.GetType();
             if (IsCompatibleDictionary(type))
@@ -78,7 +79,7 @@ namespace Ocelog
 
         private static Dictionary<string, object> BoxDictionaryValues(Type valueType, object fields)
         {
-            var method = typeof(ObjectMerging).GetMethod("GenericBoxDictionaryValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var method = typeof(ObjectMerging).GetMethod("GenericBoxDictionaryValues", BindingFlags.Static | BindingFlags.NonPublic);
             var genericMethod = method.MakeGenericMethod(valueType);
             return (Dictionary<string, object>)genericMethod.Invoke(null, new[] { fields });
         }
@@ -99,7 +100,7 @@ namespace Ocelog
 
         private static IEnumerable<object> BoxEnumerableValues(Type valueType, object fields)
         {
-            var method = typeof(ObjectMerging).GetMethod("GenericBoxEnumerableValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var method = typeof(ObjectMerging).GetMethod("GenericBoxEnumerableValues", BindingFlags.Static | BindingFlags.NonPublic);
             var genericMethod = method.MakeGenericMethod(valueType);
             return (IEnumerable<object>)genericMethod.Invoke(null, new[] { fields });
         }
@@ -111,7 +112,7 @@ namespace Ocelog
             return enumerable.Cast<object>();
         }
 
-        private static object SafeGetValue(object fields, System.Reflection.PropertyInfo prop)
+        private static object SafeGetValue(object fields, PropertyInfo prop)
         {
             try
             {
@@ -119,7 +120,7 @@ namespace Ocelog
             }
             catch
             {
-                return new Dictionary<string, object>() { { "OcelogWarning", "Exception thrown by invocation" } };
+                return new Dictionary<string, object> { { "OcelogWarning", "Exception thrown by invocation" } };
             }
         }
 
@@ -161,7 +162,7 @@ namespace Ocelog
         {
             var type = fields.GetType();
 
-            return typeof(System.Reflection.MethodBase).IsAssignableFrom(type);
+            return typeof(MethodBase).IsAssignableFrom(type);
         }
 
         private static bool IsPredicate(object content)
@@ -180,7 +181,7 @@ namespace Ocelog
 
         private static object[] Push(this object[] @this, object toPush)
         {
-            return @this.Concat(new object[] { toPush }.AsEnumerable()).ToArray();
+            return @this.Concat(new[] { toPush }.AsEnumerable()).ToArray();
         }
     }
 }
